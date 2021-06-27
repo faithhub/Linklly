@@ -38,7 +38,19 @@ exports.create = async(req, res) => {
                     table: TABLE,
                     records: [{
                         originalLink: req.body.link,
-                        shortedLink: shortedLink
+                        shortedLink: shortedLink,
+                        mobile: 0,
+                        desktop: 0,
+                        android: 0,
+                        ios: 0,
+                        windows: 0,
+                        linux: 0,
+                        macos: 0,
+                        chrome: 0,
+                        edge: 0,
+                        edgeChromium: 0,
+                        opera: 0,
+                        firefox: 0
                     }, ],
                 })
                 .then(result => {
