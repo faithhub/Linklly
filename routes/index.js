@@ -26,7 +26,7 @@ router.get('/get/:id', controller.get)
 /**
  * Save Analysis Route
  */
-router.post('/analysis', validation('create'), controller.get)
+router.post('/analysis', validation('update'), controller.createAnalysis)
 
 
 /**

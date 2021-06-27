@@ -21,6 +21,26 @@ function randomString() {
 }
 
 /**
+ * Save Function
+ */
+async function saveDataChrome(id, data) {
+    return await db.update({
+        table: TABLE,
+        records: [{
+            id: id,
+            chrome: data,
+        }, ],
+    })
+}
+
+/**
+ * Count Record
+ */
+async function countData(id) {
+    return await db.query(`SELECT * FROM ${SCHEMA}.${TABLE} WHERE shortedLink = "${id}"`);
+}
+
+/**
  * 
  * Create One
  */
@@ -39,6 +59,7 @@ exports.create = async(req, res) => {
                     records: [{
                         originalLink: req.body.link,
                         shortedLink: shortedLink,
+                        country: null,
                         mobile: 0,
                         desktop: 0,
                         android: 0,
@@ -127,39 +148,293 @@ exports.createAnalysis = async(req, res) => {
             error: errors.mapped()
         })
     } else {
-        try {
-            db.insert({
-                    table: TABLE,
-                    records: [{
-                        shortedLink: req.body.shortedLink,
-                        country: req.body.country,
-                        device: req.body.device,
-                        system: req.body.system,
-                        broswer: req.body.broswer,
-                    }, ],
-                })
-                .then(result => {
-                    res.status(200).json({
-                        message: "Link Created successfully",
-                        response: {
-                            originalLink: req.body.link,
-                            shortedLink: shortedLink
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.log(error)
-                    res.status(422).json({
-                        message: "An error occur",
-                        response: error
-                    });
-                })
-        } catch (error) {
-            res.status(422).json({
-                message: "An error occur",
-                response: error
-            });
+        if (req.body.country) {
+
         }
+        if (req.body.system) {
+            switch (req.body.system) {
+                case "windows":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            desktop: result.data[0].desktop + 1,
+                                            windows: result.data[0].windows + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "android":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            mobile: result.data[0].mobile + 1,
+                                            android: result.data[0].android + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "ios":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            mobile: result.data[0].mobile + 1,
+                                            ios: result.data[0].ios + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "linux":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            desktop: result.data[0].desktop + 1,
+                                            linux: result.data[0].linux + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "macos":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            desktop: result.data[0].desktop + 1,
+                                            macos: result.data[0].macos + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+        if (req.body.browser) {
+            switch (req.body.browser) {
+                case "chrome":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            chrome: result.data[0].chrome + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "edge":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            edge: result.data[0].edge + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "edgeChromium":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            edgeChromium: result.data[0].edgeChromium + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "firefox":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            firefox: result.data[0].firefox + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+                case "opera":
+                    try {
+                        countData(req.body.id)
+                            .then(result => {
+                                db.update({
+                                        table: TABLE,
+                                        records: [{
+                                            id: result.data[0].id,
+                                            opera: result.data[0].opera + 1,
+                                        }, ],
+                                    })
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    break;
+
+
+                default:
+                    break;
+            }
+        }
+
+
+        res.status(200).json({
+            message: "Record Updated Successfully",
+        });
     }
 };
 
