@@ -32,7 +32,7 @@ router.post('/analysis', validation('update'), controller.createAnalysis)
 /**
  * Get Analysis Route
  */
-router.get('/analysis/:id', controller.get)
+router.get('/analysis/:id', controller.getAnalysis)
 
 
 /**

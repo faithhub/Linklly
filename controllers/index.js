@@ -8,6 +8,7 @@ const saltRounds = 10;
  */
 const SCHEMA = process.env.INSTANCE_SCHEMA;
 const TABLE = 'links';
+const COUNTRY = 'countries';
 
 /**
  * Six Unique Alphanumeric ID
@@ -21,20 +22,7 @@ function randomString() {
 }
 
 /**
- * Save Function
- */
-async function saveDataChrome(id, data) {
-    return await db.update({
-        table: TABLE,
-        records: [{
-            id: id,
-            chrome: data,
-        }, ],
-    })
-}
-
-/**
- * Count Record
+ * Count Record Function
  */
 async function countData(id) {
     return await db.query(`SELECT * FROM ${SCHEMA}.${TABLE} WHERE shortedLink = "${id}"`);
@@ -59,7 +47,6 @@ exports.create = async(req, res) => {
                     records: [{
                         originalLink: req.body.link,
                         shortedLink: shortedLink,
-                        country: null,
                         mobile: 0,
                         desktop: 0,
                         android: 0,
@@ -149,7 +136,30 @@ exports.createAnalysis = async(req, res) => {
         })
     } else {
         if (req.body.country) {
-
+            try {
+                countData(req.body.id)
+                    .then(result => {
+                        db.insert({
+                                table: COUNTRY,
+                                records: [{
+                                    countryName: req.body.country,
+                                    shortedLink: result.data[0].shortedLink,
+                                    shortedLinkId: result.data[0].id
+                                }, ],
+                            })
+                            .then(result => {
+                                //console.log(result)
+                            })
+                            .catch(error => {
+                                //console.log(error)
+                            })
+                    })
+                    .catch(error => {
+                        //console.log(error)
+                    })
+            } catch (error) {
+                //console.log(error)
+            }
         }
         if (req.body.system) {
             switch (req.body.system) {
@@ -166,17 +176,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -193,17 +203,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -220,17 +230,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -247,17 +257,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -274,17 +284,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -307,17 +317,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -333,17 +343,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -359,17 +369,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -385,17 +395,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -411,17 +421,17 @@ exports.createAnalysis = async(req, res) => {
                                         }, ],
                                     })
                                     .then(data => {
-                                        console.log(data)
+                                        //console.log(data)
                                     })
                                     .catch(err => {
-                                        console.log(err)
+                                        //console.log(err)
                                     })
                             })
                             .catch(error => {
-                                console.log(error)
+                                //console.log(error)
                             })
                     } catch (error) {
-                        console.log(error)
+                        //console.log(error)
                     }
                     break;
 
@@ -430,7 +440,6 @@ exports.createAnalysis = async(req, res) => {
                     break;
             }
         }
-
 
         res.status(200).json({
             message: "Record Updated Successfully",
@@ -445,21 +454,38 @@ exports.createAnalysis = async(req, res) => {
  */
 exports.getAnalysis = async(req, res) => {
     try {
-        const QUERY = `SELECT * FROM ${SCHEMA}.${TABLE} WHERE shortedLink="${req.params.id}"`;
-        db.query(QUERY)
-            .then(result => {
-                console.log(result.data);
-                if (result.data != '') {
-                    res.status(200).json({
-                        message: "Fetched Successful",
-                        response: result
-                    });
-                } else {
-                    res.status(200).json({
-                        message: "No record found for the id given",
-                        response: result
-                    });
+        var QUERYSTATS = `SELECT * FROM ${SCHEMA}.${TABLE} WHERE shortedLink="${req.params.id}"`;
+        var QUERYCOUNTRY = `SELECT countryName FROM ${SCHEMA}.${COUNTRY} WHERE shortedLink="${req.params.id}"`;
+        db.query(QUERYSTATS)
+            .then(result1 => {
+                var data = {
+                    mobile: result1.data[0].mobile,
+                    desktop: result1.data[0].desktop,
+                    windows: result1.data[0].windows,
+                    macos: result1.data[0].macos,
+                    linux: result1.data[0].linux,
+                    android: result1.data[0].android,
+                    ios: result1.data[0].ios,
+                    chrome: result1.data[0].chrome,
+                    edge: result1.data[0].edge,
+                    firefox: result1.data[0].firefox,
+                    opera: result1.data[0].opera,
+                    edgeChromium: result1.data[0].edgeChromium
                 }
+                db.query(QUERYCOUNTRY)
+                    .then(result2 => {
+                        res.status(200).json({
+                            message: "Fetched Successful",
+                            stats: data,
+                            countries: result2.data
+                        });
+                    })
+                    .catch(error => {
+                        res.status(422).json({
+                            message: "An error occur",
+                            response: error
+                        });
+                    })
             })
             .catch(error => {
                 res.status(422).json({
