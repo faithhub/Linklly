@@ -139,19 +139,42 @@ exports.createAnalysis = async(req, res) => {
             try {
                 countData(req.body.id)
                     .then(result => {
-                        db.insert({
-                                table: COUNTRY,
-                                records: [{
-                                    countryName: req.body.country,
-                                    shortedLink: result.data[0].shortedLink,
-                                    shortedLinkId: result.data[0].id
-                                }, ],
-                            })
-                            .then(result => {
-                                //console.log(result)
+                        db.query(`SELECT * FROM ${SCHEMA}.${COUNTRY} WHERE shortedLink = "${result.data[0].shortedLink}" AND name = "${req.body.country}"`)
+                            .then(data => {
+                                if (data && data.data != '') {
+                                    db.update({
+                                            table: COUNTRY,
+                                            records: [{
+                                                id: data.data[0].id,
+                                                count: data.data[0].count + 1
+                                            }, ],
+                                        })
+                                        .then(data => {
+                                            //console.log(data)
+                                        })
+                                        .catch(err => {
+                                            //console.log(err)
+                                        })
+                                } else {
+                                    db.insert({
+                                            table: COUNTRY,
+                                            records: [{
+                                                name: req.body.country,
+                                                count: 1,
+                                                shortedLink: result.data[0].shortedLink,
+                                                shortedLinkId: result.data[0].id
+                                            }, ],
+                                        })
+                                        .then(result => {
+                                            //console.log(result)
+                                        })
+                                        .catch(error => {
+                                            //console.log(error)
+                                        })
+                                }
                             })
                             .catch(error => {
-                                //console.log(error)
+
                             })
                     })
                     .catch(error => {
@@ -455,7 +478,7 @@ exports.createAnalysis = async(req, res) => {
 exports.getAnalysis = async(req, res) => {
     try {
         var QUERYSTATS = `SELECT * FROM ${SCHEMA}.${TABLE} WHERE shortedLink="${req.params.id}"`;
-        var QUERYCOUNTRY = `SELECT countryName FROM ${SCHEMA}.${COUNTRY} WHERE shortedLink="${req.params.id}"`;
+        var QUERYCOUNTRY = `SELECT * FROM ${SCHEMA}.${COUNTRY} WHERE shortedLink="${req.params.id}"`;
         db.query(QUERYSTATS)
             .then(result1 => {
                 var data = {
@@ -511,10 +534,12 @@ exports.getAnalysis = async(req, res) => {
                 }
                 db.query(QUERYCOUNTRY)
                     .then(result2 => {
+                        var element = result2.data.map(person => ([person.name, person.count]));
+                        // console.log(element)
                         res.status(200).json({
                             message: "Fetched Successful",
-                            stats: data,
-                            countries: result2.data
+                            Statistic: data,
+                            Countries: element
                         });
                     })
                     .catch(error => {
