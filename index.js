@@ -10,15 +10,6 @@ const detenv = require('dotenv-safe').config({
 });
 
 
-app.use((req, res, next) => {
-    res.header('Acess-Control-Allow-Origin', '*')
-    res.header('Content-Type: application/json; charset=utf-8')
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-    if (req.method === "OPTIONS") {
-        res.header('Access-Control-Allow-Methods', 'PATCH, POST, DELETE, GET')
-        return res.status(200).json();
-    }
-})
 
 /**
  * Routes
@@ -44,7 +35,7 @@ app.use(express.urlencoded({
 /**
  * App Use CORS
  */
-app.use(cors())
+// app.use(cors())
 
 
 /**
@@ -74,9 +65,18 @@ app.use((error, req, res, next) => {
 //         preflightContinue: false,
 //     }
 
-/**
- * Service static files
- */
+app.use((req, res, next) => {
+        res.header('Acess-Control-Allow-Origin', '*')
+        res.header('Content-Type: application/json; charset=utf-8')
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+        if (req.method === "OPTIONS") {
+            res.header('Access-Control-Allow-Methods', 'PATCH, POST, DELETE, GET')
+            return res.status(200).json();
+        }
+    })
+    /**
+     * Service static files
+     */
 app.use(express.static(path.join(__dirname, '/harperdb/')));
 
 /**
